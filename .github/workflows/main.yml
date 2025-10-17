@@ -1,30 +1,4 @@
-
-### 5. `.github/workflows/build-apk.yml`
-```yaml
-name: Build APK
-
-on:
-  push:
-    branches: [ main ]
-  release:
-    types: [ published ]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-      
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
-        
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pipname: Build Android APK
+name: Build Android APK
 
 on:
   push:
@@ -55,23 +29,3 @@ jobs:
         name: school-management-app
         path: build/apk/
         retention-days: 30
-        pip install flet[build]
-        
-    - name: Build APK
-      run: |
-        flet build apk --build-version "1.0.${{ github.run_number }}"
-        
-    - name: Upload APK
-      uses: actions/upload-artifact@v3
-      with:
-        name: school-management-apk
-        path: build/apk/
-        
-    - name: Create Release
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      uses: softprops/action-gh-release@v1
-      with:
-        files: build/apk/**/*.apk
-        tag_name: latest
-        draft: false
-        prerelease: false
