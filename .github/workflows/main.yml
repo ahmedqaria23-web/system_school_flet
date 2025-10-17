@@ -24,7 +24,37 @@ jobs:
         
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
+        python -m pip install --upgrade pipname: Build Android APK
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install Flet and build tools
+      run: |
+        pip install flet[build]
+    
+    - name: Build APK
+      run: flet build apk
+    
+    - name: Upload APK artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: school-management-app
+        path: build/apk/
+        retention-days: 30
         pip install flet[build]
         
     - name: Build APK
